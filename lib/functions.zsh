@@ -15,3 +15,13 @@ function take() {
   cd $1
 }
 
+function swap () {
+    [ $# -ne 2 ] && echo "swap: 2 arguments needed" && return 1
+    [ ! -e $1 ] && echo "swap: $1 does not exit" && return 1
+    [ ! -e $2 ] && echo "swap: $2 does not exit" && return 1
+
+    local TMPNAME=tmp.$$
+    mv "$1" TMPNAME;
+    mv "$2" "$1"
+    mv TMPNAME "$2"
+}
