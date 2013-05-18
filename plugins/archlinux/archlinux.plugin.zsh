@@ -17,6 +17,7 @@ if [[ -x `which yaourt` ]]; then
   alias yarep='yaourt -Si'         # Display information about a given package in the repositories
   alias yareps='yaourt -Ss'        # Search for package(s) in the repositories
   alias yaloc='yaourt -Qi'         # Display information about a given package in the local database
+  alias yaql='yaourt -Ql'          # List all the files installed by the given package
   alias yalocs='yaourt -Qs'        # Search for package(s) in the local database
   alias yalst='yaourt -Qe'         # List installed packages, even those installed from AUR (they're tagged as "local")
   alias yaorph='yaourt -Qtd'       # Remove orphans using yaourt
@@ -43,6 +44,7 @@ alias pacrem='sudo pacman -Rns'        # Remove the specified package(s), its co
 alias pacrep='pacman -Si'              # Display information about a given package in the repositories
 alias pacreps='pacman -Ss'             # Search for package(s) in the repositories
 alias pacloc='pacman -Qi'              # Display information about a given package in the local database
+alias pacql='pacman -Ql'               # List all the files installed by the given package
 alias paclocs='pacman -Qs'             # Search for package(s) in the local database
 # Additional pacman alias examples
 if [[ -x `which abs` ]]; then
