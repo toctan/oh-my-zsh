@@ -50,7 +50,7 @@ if (( CURRENT == 1 )); then
 fi
 
 case "$words[1]" in
-  (g|generate)
+  g|generate|d|destroy)
     _rails_generate_arguments
     _wanted generate_arguments expl 'all generate' compadd -a generate_arguments ;;
 esac
