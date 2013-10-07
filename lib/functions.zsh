@@ -25,3 +25,12 @@ function swap () {
     mv "$2" "$1"
     mv TMPNAME "$2"
 }
+
+function explain {
+    url="http://explainshell.com/explain/$1?args="
+    shift;
+    for i in "$@"; do
+        url=$url"$i""+"
+    done
+    xdg-open $url
+}
