@@ -23,7 +23,3 @@ alias la='ls -lA'
 alias sl=ls # often screw this up
 
 alias afind='ack-grep -il'
-
-# Emacs
-alias e='emacsclient'
-alias E="SUDO_EDITOR=\"emacsclient -t -a emacs\" sudoedit"
