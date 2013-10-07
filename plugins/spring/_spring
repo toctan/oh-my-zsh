@@ -1,0 +1,25 @@
+#compdef spring
+#autoload
+
+local -a _1st_arguments
+_1st_arguments=(
+    'binstub  :Generate spring based binstubs.'
+    'help     :Print available commands.'
+    'status   :Show current status.'
+    'stop     :Stop all spring processes for this project.'
+    'cucumber :Runs the cucumber command'
+    'rails    :Run a rails command(console, runner, generate)'
+    'rake     :Runs the rake command'
+    'rspec    :Runs the rspec command'
+    'testunit :Execute a Test::Unit test.'
+)
+
+_arguments \
+    '(--version)--version[show version]' \
+    '(--help)--help[show help]' \
+    '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+    _describe -t commands "spring subcommand" _1st_arguments
+    return
+fi
