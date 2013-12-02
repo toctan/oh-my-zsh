@@ -1,32 +1,57 @@
-# Rails 3 aliases, backwards-compatible with Rails 2.
-
 function _rails_command () {
   if [ -e "script/server" ]; then
     ruby script/$@
+  elif [ -e "script/rails" ]; then
+    ruby script/rails $@
+  elif [ -e "bin/rails" ]; then
+    bin/rails $@
   else
-    if [ -e "bin/rails" ]; then
-      bin/rails $@
-    else
-      rails $@
-    fi
+    rails $@
   fi
 }
 
-alias rc='_rails_command console'
-alias rd='_rails_command destroy'
-alias rdb='_rails_command dbconsole'
-alias rdbm='rake db:migrate db:test:clone'
-alias rg='_rails_command generate'
-alias rgm='_rails_command generate migration'
-alias rp='_rails_command plugin'
-alias ru='_rails_command runner'
-alias rs='_rails_command server'
-alias rsd='_rails_command server --debugger'
+function _rake_command () {
+  if [ -e "bin/rake" ]; then
+    bin/rake $@
+  else
+    rake $@
+  fi
+}
+
+alias rails='_rails_command'
+compdef _rails_command=rails
+
+alias rake='_rake_command'
+compdef _rake_command=rake
+
 alias devlog='tail -f log/development.log'
-alias testlog='tail -f log/test.log'
 alias prodlog='tail -f log/production.log'
+alias testlog='tail -f log/test.log'
+
+alias -g RED='RAILS_ENV=development'
+alias -g REP='RAILS_ENV=production'
+alias -g RET='RAILS_ENV=test'
+
+# Rails aliases
+alias rc='rails console'
+alias rd='rails destroy'
+alias rdb='rails dbconsole'
+alias rg='rails generate'
+alias rgm='rails generate migration'
+alias rp='rails plugin'
+alias ru='rails runner'
+alias rs='rails server'
+alias rsd='rails server --debugger'
+
+# Rake aliases
 alias rdm='rake db:migrate'
 alias rdr='rake db:rollback'
-alias -g RET='RAILS_ENV=test'
-alias -g REP='RAILS_ENV=production'
-alias -g RED='RAILS_ENV=development'
+alias rdc='rake db:create'
+alias rds='rake db:seed'
+alias rdd='rake db:drop'
+alias rdtc='rake db:test:clone'
+alias rdtp='rake db:test:prepare'
+
+alias rlc='rake log:clear'
+alias rn='rake notes'
+alias rr='rake routes'
