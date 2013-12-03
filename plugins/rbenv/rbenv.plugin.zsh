@@ -3,7 +3,7 @@ _rbenv-installed() {
 }
 
 if _rbenv-installed ; then
-    eval "$(rbenv init - --no-rehash)"
+    eval "$(rbenv init --no-rehash - zsh)"
 
     alias rubies="rbenv versions"
     alias gemsets="rbenv gemset list"
