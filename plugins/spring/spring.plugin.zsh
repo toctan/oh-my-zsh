@@ -2,8 +2,16 @@ spring_commands=(testunit rspec cucumber rake rails)
 
 ## Functions
 
+_rbenv-installed() {
+    hash rbenv 2>/dev/null
+}
+
 _spring-installed() {
-    which spring > /dev/null 2>&1
+    if _rbenv-installed; then
+        rbenv which spring > /dev/null 2>&1
+    else
+        hash spring > /dev/null 2>&1
+    fi
 }
 
 _within-bundled-project() {
