@@ -2,9 +2,9 @@
 if [ "$commands[(I)hub]" ] && [ "$commands[(I)ruby]" ]; then
     # Autoload _git completion functions
     if declare -f _git > /dev/null; then
-      _git
+        _git
     fi
-    
+
     if declare -f _git_commands > /dev/null; then
         _hub_commands=(
             'alias:show shell instructions for wrapping git'
@@ -33,7 +33,7 @@ fi
 
 # Functions #################################################################
 
-# https://github.com/dbb 
+# https://github.com/dbb
 
 
 # empty_gh [NAME_OF_REPO]
@@ -85,4 +85,3 @@ exist_gh() { # [DIRECTORY]
 }
 
 # End Functions #############################################################
-
