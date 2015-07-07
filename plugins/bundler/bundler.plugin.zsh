@@ -4,46 +4,74 @@ alias bp="bundle package"
 alias bo="bundle open"
 alias bu="bundle update"
 alias bi="bundle_install"
+alias bcn="bundle clean"
 
-# The following is based on https://github.com/gma/bundler-exec
-
-bundled_commands=(annotate berks cap capify cucumber foodcritic
-foreman guard jekyll kitchen knife mailcatcher middleman nanoc rackup
-rainbows rake rspec ruby shotgun spec spin spork strainer tailor taps
-thin thor unicorn unicorn_rails puma)
+bundled_commands=(
+  annotate
+  cap
+  capify
+  cucumber
+  foodcritic
+  guard
+  irb
+  jekyll
+  kitchen
+  knife
+  middleman
+  nanoc
+  pry
+  puma
+  rackup
+  rainbows
+  rake
+  rspec
+  shotgun
+  sidekiq
+  spec
+  spork
+  spring
+  strainer
+  tailor
+  taps
+  thin
+  thor
+  unicorn
+  unicorn_rails
+)
 
 # Remove $UNBUNDLED_COMMANDS from the bundled_commands list
 for cmd in $UNBUNDLED_COMMANDS; do
-    bundled_commands=(${bundled_commands#$cmd});
+  bundled_commands=(${bundled_commands#$cmd});
+done
+
+# Add $BUNDLED_COMMANDS to the bundled_commands list
+for cmd in $BUNDLED_COMMANDS; do
+  bundled_commands+=($cmd);
 done
 
 ## Functions
 
-bi() {
-    if _bundler-installed && _within-bundled-project; then
-        local bundler_version=`bundle version | cut -d' ' -f3`
-        if [[ $bundler_version > '1.4.0' || $bundler_version = '1.4.0' ]]; then
-            if [[ "$(uname)" == 'Darwin' ]]
-            then
-                local cores_num="$(sysctl hw.ncpu | awk '{print $2}')"
-            else
-                local cores_num="$(nproc)"
-            fi
-            bundle install --jobs=$cores_num $@
-        else
-            bundle install $@
-        fi
+bundle_install() {
+  if _bundler-installed && _within-bundled-project; then
+    local bundler_version=`bundle version | cut -d' ' -f3`
+    if [[ $bundler_version > '1.4.0' || $bundler_version = '1.4.0' ]]; then
+      if [[ "$OSTYPE" = darwin* ]]
+      then
+        local cores_num="$(sysctl hw.ncpu | awk '{print $2}')"
+      else
+        local cores_num="$(nproc)"
+      fi
+      bundle install --jobs=$cores_num $@
     else
-        echo "Can't 'bundle install' outside a bundled project"
+      bundle install $@
     fi
+  else
+    echo "Can't 'bundle install' outside a bundled project"
+  fi
 }
 
 _bundler-installed() {
-    if _rbenv-installed; then
-        rbenv which bundle > /dev/null 2>&1
-    else
-        which bundle > /dev/null 2>&1
-    fi
+  which bundle > /dev/null 2>&1
 }
 
 _within-bundled-project() {
@@ -55,21 +83,29 @@ _within-bundled-project() {
   false
 }
 
+_binstubbed() {
+  [ -f "./bin/${1}" ]
+}
+
 _run-with-bundler() {
-    if _bundler-installed && _within-bundled-project; then
-        bundle exec $@
+  if _bundler-installed && _within-bundled-project; then
+    if _binstubbed $1; then
+      ./bin/$@
     else
-        $@
+      bundle exec $@
     fi
+  else
+    $@
+  fi
 }
 
 ## Main program
 for cmd in $bundled_commands; do
-    eval "function unbundled_$cmd () { $cmd \$@ }"
-    eval "function bundled_$cmd () { _run-with-bundler $cmd \$@}"
-    alias $cmd=bundled_$cmd
+  eval "function unbundled_$cmd () { $cmd \$@ }"
+  eval "function bundled_$cmd () { _run-with-bundler $cmd \$@}"
+  alias $cmd=bundled_$cmd
 
-    if which _$cmd > /dev/null 2>&1; then
-        compdef _$cmd bundled_$cmd=$cmd
-    fi
+  if which _$cmd > /dev/null 2>&1; then
+    compdef _$cmd bundled_$cmd=$cmd
+  fi
 done
